@@ -16,16 +16,16 @@ public class Firm implements Serializable {
     @Column(name = "firm_id")
     private Long firmId;
 
-    @Column(name = "firm_name")
+    @Column(name = "firm_name", nullable = false)
     private String firmName;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(name = "firm_email")
+    @Column(name = "firm_email", unique = true)
     private String firmEmail;
 
-    @Column(name = "firm_website")
+    @Column(name = "firm_website", unique = true)
     private String firmWebsite;
 
     @OneToMany(mappedBy = "firm", fetch = FetchType.EAGER)

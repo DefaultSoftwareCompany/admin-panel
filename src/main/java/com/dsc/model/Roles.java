@@ -17,7 +17,7 @@ public class Roles implements Serializable {
     @Column(name = "role_id")
     private Short roleId;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false, unique = true)
     private String role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
@@ -37,12 +37,6 @@ public class Roles implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Roles roles = (Roles) o;
-        return Objects.equals(roleId, roles.roleId) &&
-                Objects.equals(role, roles.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(roleId, role, customers);
+        return Objects.equals(role, roles.role);
     }
 }

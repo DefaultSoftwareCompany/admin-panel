@@ -15,30 +15,30 @@ public class OrderedProducts implements Serializable {
     private Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @Column(name = "order_quantity")
+    @Column(name = "order_quantity", nullable = false)
     private Integer orderQuantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "office_id")
+    @JoinColumn(name = "office_id", nullable = false)
     private DeliveryOffice office;
 
-    @Column(name = "date_of_order")
+    @Column(name = "date_of_order", nullable = false)
     private String dateOfOrder;
 
-    @Column(name = "deadline")
+    @Column(name = "deadline", nullable = false)
     private byte deadline;
 
-    @Column(name = "completion")
+    @Column(name = "completion", nullable = false)
     private Boolean completion;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 }
