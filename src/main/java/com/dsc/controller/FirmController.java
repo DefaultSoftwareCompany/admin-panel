@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class FirmController {
@@ -19,16 +20,9 @@ public class FirmController {
     }
 
     @GetMapping("/api/firm/get/all")
-    public String getAll(Model model) {
-        model.addAttribute("firms", service.getAll());
-        return "admin-panel/firm-list";
+    public ResponseEntity<List<Firm>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
-
-    @GetMapping("/api/firm")
-    public String getPage() {
-        return "admin-panel/add-firm";
-    }
-
 
     @GetMapping("/api/firm/get/{firmId}")
     public ResponseEntity<Firm> getByFirmId(@PathVariable Long firmId) {
@@ -36,15 +30,8 @@ public class FirmController {
     }
 
     @PostMapping("/api/firm")
-    public String save(@ModelAttribute Firm firm, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
-            model.addAttribute("firm",firm);
-            return "admin-panel/add-firm";
-        }
-        service.save(firm);
-        model.addAttribute("firms", service.getAll());
-        return "admin-panel/firm-list";
+    public ResponseEntity<Firm> save(@ModelAttribute Firm firm) {
+        return ResponseEntity.ok(service.save(firm));
     }
 
     @PutMapping("/api/firm/edit/{firmId}")
