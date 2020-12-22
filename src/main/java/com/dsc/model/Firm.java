@@ -16,19 +16,19 @@ public class Firm implements Serializable {
     @Column(name = "firm_id")
     private Long firmId;
 
-    @Column(name = "firm_name", nullable = false)
+    @Column(name = "firm_name" )
     private String firmName;
 
-    @Column(name = "phone_number", unique = true)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "firm_email", unique = true)
+    @Column(name = "firm_email")
     private String firmEmail;
 
-    @Column(name = "firm_website", unique = true)
+    @Column(name = "firm_website")
     private String firmWebsite;
 
-    @OneToMany(mappedBy = "firm", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "firm")
     @JsonIgnore
     private List<Product> products;
 }

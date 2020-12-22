@@ -16,14 +16,14 @@ public class DeliveryOffice implements Serializable {
     @Column(name = "office_id")
     private Short officeId;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @OneToOne
-    @JoinColumn(name = "address_id", nullable = false)
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email")
     private String email;
 
     @OneToMany(mappedBy = "office")

@@ -16,14 +16,14 @@ public class Category implements Serializable {
     @Column(name = "category_id")
     private Short categoryId;
 
-    @Column(name = "category_name", nullable = false, unique = true)
+    @Column(name = "category_name")
     private String categoryName;
 
-    @Column(name = "category_description", nullable = false)
+    @Column(name = "category_description")
     private String categoryDescription;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assets_id", nullable = false)
+    @JoinColumn(name = "assets_id")
     @JsonIgnore
     private Assets assets;
 

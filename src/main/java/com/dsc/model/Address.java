@@ -15,16 +15,16 @@ public class Address implements Serializable {
     @Column(name = "address_id")
     private Long addressId;
 
-    @Column(name = "city_name", nullable = false)
+    @Column(name = "city_name" )
     private String cityName;
 
-    @Column(name = "district_name", nullable = false)
+    @Column(name = "district_name" )
     private String districtName;
 
-    @Column(name = "street_name", nullable = false)
+    @Column(name = "street_name" )
     private String streetName;
 
-    @Column(name = "house_number", nullable = false)
+    @Column(name = "house_number" )
     private String houseNumber;
 
     @OneToOne(mappedBy = "address")

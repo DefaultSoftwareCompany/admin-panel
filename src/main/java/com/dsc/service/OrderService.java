@@ -49,34 +49,7 @@ public class OrderService {
         return repository.getAllByProduct(productService.getOne(productId));
     }
 
-    public OrderedProducts save(HttpServletRequest request) {
-        Address address = addressService.save(request);
-        OrderedProducts orderedProducts = new OrderedProducts();
-        orderedProducts.setAddress(address);
-        String productId = request.getParameter("productId");
-        String orderQuantity = request.getParameter("quantity");
-        String customerId = request.getParameter("customerId");
-        Random random = new Random();
-        if (productId != null && !productId.isEmpty()) {
-            Product product = productService.getOne(Long.parseLong(productId));
-            orderedProducts.setProduct(product);
-        }
-        if (orderQuantity != null && !orderQuantity.isEmpty()) {
-            orderedProducts.setOrderQuantity(Integer.parseInt(orderQuantity));
-        }
-        if (customerId != null && !customerId.isEmpty()) {
-            Customer customer = customerService.getOne(Long.parseLong(customerId));
-            orderedProducts.setCustomer(customer);
-        }
-        if (officeRepository.getByDistrictName(address.getDistrictName()) != null) {
-            orderedProducts.setOffice(officeRepository.getByDistrictName(address.getDistrictName()));
-        } else {
-            List<DeliveryOffice> officeList = officeRepository.getByCityName(address.getCityName());
-            orderedProducts.setOffice(officeList.get(random.nextInt(officeList.size() + 1)));
-        }
-        orderedProducts.setCompletion(false);
-        orderedProducts.setDeadline((byte) 20);
-        orderedProducts.setDateOfOrder(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+    public OrderedProducts save(OrderedProducts orderedProducts) throws Exception {
         return repository.save(orderedProducts);
     }
 }

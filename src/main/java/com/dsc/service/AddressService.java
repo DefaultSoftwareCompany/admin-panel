@@ -5,6 +5,7 @@ import com.dsc.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -23,17 +24,9 @@ public class AddressService {
         return repository.getAddressByAddressId(addressId);
     }
 
-    public Address save(HttpServletRequest request) {
-        Address address = new Address();
-        String cityName = request.getParameter("cityName");
-        String districtName = request.getParameter("districtName");
-        String streetName = request.getParameter("streetName");
-        String houseNumber = request.getParameter("houseNumber");
-        if (cityName != null && !cityName.isEmpty() && districtName != null && !districtName.isEmpty() && streetName != null && !streetName.isEmpty() && houseNumber != null && !houseNumber.isEmpty()) {
-            address.setCityName(cityName);
-            address.setDistrictName(districtName);
-            address.setStreetName(streetName);
-            address.setHouseNumber(houseNumber);
+    public Address save(Address address) throws Exception {
+        if (address.getCityName() == null || address.getDistrictName() == null || address.getStreetName() == null || address.getHouseNumber() == null) {
+            throw new Exception("Fill out the form completely!");
         }
         return repository.save(address);
     }

@@ -17,7 +17,7 @@ public class Roles implements Serializable {
     @Column(name = "role_id")
     private Short roleId;
 
-    @Column(name = "role", nullable = false, unique = true)
+    @Column(name = "role")
     private String role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)

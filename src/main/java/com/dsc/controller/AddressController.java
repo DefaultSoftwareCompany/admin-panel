@@ -3,7 +3,9 @@ package com.dsc.controller;
 import com.dsc.model.Address;
 import com.dsc.service.AddressService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -27,8 +29,10 @@ public class AddressController {
     }
 
     @PostMapping("/api/address/save")
-    public ResponseEntity<Address> save(HttpServletRequest request) {
-        return ResponseEntity.ok(service.save(request));
+    public ModelAndView save(@ModelAttribute Address address, ModelAndView modelAndView) {
+        modelAndView.setViewName("address/address-save");
+        modelAndView.addObject(address);
+        return modelAndView;
     }
 
     @PutMapping("/api/address/edit/{addressId}")

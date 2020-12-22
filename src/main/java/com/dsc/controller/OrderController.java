@@ -3,10 +3,7 @@ package com.dsc.controller;
 import com.dsc.model.OrderedProducts;
 import com.dsc.service.OrderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -20,8 +17,8 @@ public class OrderController {
     }
 
     @PostMapping("/api/order/save")
-    public ResponseEntity<OrderedProducts> save(HttpServletRequest request) {
-        return ResponseEntity.ok(service.save(request));
+    public ResponseEntity<OrderedProducts> save(@ModelAttribute OrderedProducts orderedProducts) throws Exception {
+        return ResponseEntity.ok(service.save(orderedProducts));
     }
 
     @GetMapping("/api/order/get/one/{orderId}")

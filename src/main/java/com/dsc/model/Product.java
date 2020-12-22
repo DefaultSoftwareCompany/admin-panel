@@ -16,31 +16,31 @@ public class Product implements Serializable {
     @Column(name = "product_id")
     private Long productId;
 
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "product_name" )
     private String productName;
 
-    @Column(name = "product_price", nullable = false)
+    @Column(name = "product_price" )
     private float productPrice;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity" )
     private Long quantity;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assets_id", nullable = false)
+    @JoinColumn(name = "assets_id" )
     @JsonIgnore
     private Assets assets;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id" )
     @JsonIgnore
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "firm_id", nullable = false)
+    @JoinColumn(name = "firm_id" )
     @JsonIgnore
     private Firm firm;
 
-    @Column(name = "date_of_manufacture", nullable = false)
+    @Column(name = "date_of_manufacture" )
     private String dateOfManufacture;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
