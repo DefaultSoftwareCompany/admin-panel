@@ -19,8 +19,9 @@ public class AddressController {
     }
 
     @GetMapping("/api/address/all/")
-    public ResponseEntity<List<Address>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public String getAll() {
+
+        return "address/address-list";
     }
 
     @GetMapping("/api/address/get/{addressId}")

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Address Save</title>
+</head>
+<body>
+
+<form th:action="@{/api/address/save}" th:object="${address}">
+    <input type="text" th:field="*{cityName}">
+    <input type="text" th:field="*{districtName}">
+    <input type="text" th:field="*{houseNumber}">
+    <button type="submit">Submit</button>
+</form>
+
+<h1>Hello World</h1>
+</body>
+</html>
