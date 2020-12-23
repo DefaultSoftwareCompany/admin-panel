@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -20,49 +21,56 @@ public class CategoryService {
         this.assetsService = assetsService;
     }
 
-    public Category save(HttpServletRequest request, MultipartHttpServletRequest mrequest) throws IOException {
-        Category category = new Category();
+    public Category save(HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+        MultipartFile file = multipartHttpServletRequest.getFile("file");
         String categoryName = request.getParameter("categoryName");
         String categoryDescription = request.getParameter("categoryDescription");
-        MultipartFile file = mrequest.getFile("file");
-        if (categoryName != null && categoryDescription != null && file != null) {
-            category.setCategoryName(categoryName);
-            category.setCategoryDescription(categoryDescription);
-            Assets assets = assetsService.save(file);
-            category.setAssets(assets);
-            assets.setCategory(category);
+        Category category = new Category();
+        if (categoryName != null && !categoryName.isEmpty() && categoryDescription != null && !categoryDescription.isEmpty() && file != null && !file.isEmpty()) {
+            category.setCategoryName(request.getParameter("categoryName"));
+            category.setCategoryDescription(request.getParameter("categoryDescription"));
+            category.setAssets(assetsService.save(file));
             return repository.save(category);
+        } else {
+            throw new Exception("Fill out the form completely!");
         }
-        return null;
     }
 
-    public Category delete(Short categoryId) {
+    public void delete(Short categoryId) {
         Category category = repository.getCategoryByCategoryId(categoryId);
         Assets assets = category.getAssets();
         repository.delete(category);
         assetsService.delete(assets);
-        return category;
+        return;
     }
 
-    public Category edit(Short categoryId, HttpServletRequest request, MultipartHttpServletRequest mrequest) throws IOException {
+    public Category edit(Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
         Category category = repository.getCategoryByCategoryId(categoryId);
+        MultipartFile file = multipartHttpServletRequest.getFile("file");
         String categoryName = request.getParameter("categoryName");
         String categoryDescription = request.getParameter("categoryDescription");
-        MultipartFile file = mrequest.getFile("file");
-        if (categoryName != null) {
+        if (categoryName != null && !categoryName.isEmpty()) {
             category.setCategoryName(categoryName);
         }
-        if (categoryDescription != null) {
+        if (categoryDescription != null && !categoryDescription.isEmpty()) {
             category.setCategoryDescription(categoryDescription);
         }
-        if (file != null) {
+        if (file != null && !file.isEmpty()) {
             Assets oldAssets = category.getAssets();
             Assets newAssets = assetsService.save(file);
             category.setAssets(newAssets);
             repository.save(category);
             assetsService.delete(oldAssets);
         }
-        return category;
+        return repository.save(category);
+    }
+
+    public List<Category> getAll() {
+        return repository.findAll();
+    }
+
+    public Category getOne(Short categoryId) {
+        return repository.getCategoryByCategoryId(categoryId);
     }
 
 }

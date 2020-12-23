@@ -4,6 +4,7 @@ import com.dsc.model.DeliveryOffice;
 import com.dsc.service.OfficeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,37 +18,55 @@ public class OfficeController {
     }
 
     @GetMapping("/api/office/all")
-    public ResponseEntity<List<DeliveryOffice>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ModelAndView getAll(ModelAndView modelAndView) {
+        modelAndView.setViewName("office/office-list");
+        modelAndView.addObject("offices", service.getAll());
+        return modelAndView;
     }
 
-    @GetMapping("/api/office/get/{officeId}")
-    public ResponseEntity<DeliveryOffice> getOne(@PathVariable Short officeId) {
-        return ResponseEntity.ok(service.getOne(officeId));
+    @GetMapping("/api/office/save")
+    public ModelAndView savePage(ModelAndView modelAndView) {
+        modelAndView.addObject("url", "/api/office/save");
+        modelAndView.addObject("error", "");
+        modelAndView.addObject("office", new DeliveryOffice());
+        modelAndView.setViewName("office/office-save");
+        return modelAndView;
     }
 
     @PostMapping("/api/office/save")
-    public ResponseEntity<DeliveryOffice> save(HttpServletRequest request) {
-        return ResponseEntity.ok(service.save(request));
+    public ModelAndView save(@ModelAttribute DeliveryOffice office, ModelAndView modelAndView) {
+        try {
+            service.save(office);
+            modelAndView.setViewName("redirect:/api/office/all");
+        } catch (Exception e) {
+            modelAndView.setViewName("office/office-save");
+            modelAndView.addObject("url", "/api/office/save");
+            modelAndView.addObject("error", e.getMessage());
+            modelAndView.addObject(office);
+        }
+        return modelAndView;
     }
 
-    @PutMapping("/api/office/edit/{officeId}")
-    public ResponseEntity<DeliveryOffice> update(@PathVariable Short officeId, HttpServletRequest request) {
-        return ResponseEntity.ok(service.edit(officeId, request));
+    @GetMapping("/api/office/edit/{officeId}")
+    public ModelAndView editPage(@PathVariable Short officeId, ModelAndView modelAndView) {
+        modelAndView.addObject("error", "");
+        modelAndView.addObject("office", service.getOne(officeId));
+        modelAndView.addObject("url", "/api/office/edit/" + officeId);
+        modelAndView.setViewName("office/office-save");
+        return modelAndView;
     }
 
-    @DeleteMapping("/api/office/delete/{officeId}")
-    public ResponseEntity<DeliveryOffice> delete(@PathVariable Short officeId) {
-        return ResponseEntity.ok(service.delete(officeId));
+    @PostMapping("/api/office/edit/{officeId}")
+    public ModelAndView update(@PathVariable Short officeId, @ModelAttribute DeliveryOffice office, ModelAndView modelAndView) {
+        modelAndView.setViewName("redirect:/api/office/all");
+        service.edit(officeId, office);
+        return modelAndView;
     }
 
-    @GetMapping("/api/office/get/district/{districtName}")
-    public ResponseEntity<DeliveryOffice> getByDistrict(@PathVariable String districtName) {
-        return ResponseEntity.ok(service.getByDistrictName(districtName));
-    }
-
-    @GetMapping("/api/office/get/city/{cityName}")
-    public ResponseEntity<List<DeliveryOffice>> getByCity(@PathVariable String cityName) {
-        return ResponseEntity.ok(service.getByCityName(cityName));
+    @GetMapping("/api/office/delete/{officeId}")
+    public ModelAndView delete(@PathVariable Short officeId, ModelAndView modelAndView) {
+        service.delete(officeId);
+        modelAndView.setViewName("redirect:/api/office/all");
+        return modelAndView;
     }
 }

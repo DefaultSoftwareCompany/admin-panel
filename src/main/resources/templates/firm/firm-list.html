@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Firm List</title>
+</head>
+<body>
+
+<table border="1" cellspacing="0">
+    <thead>
+    <tr>
+        <th>firmName</th>
+        <th>firmEmail</th>
+        <th>firmWebsite</th>
+        <th>firmPhoneNumber</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <tbody th:each="firm : ${firms}">
+    <tr>
+        <td th:text="${firm.firmName}"></td>
+        <td th:text="${firm.firmEmail}"></td>
+        <td th:text="${firm.firmWebsite}"></td>
+        <td th:text="${firm.phoneNumber}"></td>
+        <td><a th:href="@{/api/firm/edit/{firmId}(firmId = ${firm.firmId})}">Edit</a></td>
+        <td><a th:href="@{/api/firm/delete/{firmId}(firmId = ${firm.firmId})}">Delete</a></td>
+    </tr>
+    </tbody>
+    </thead>
+</table>
+
+</body>
+</html>

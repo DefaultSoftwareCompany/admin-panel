@@ -2,17 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Address Save</title>
+    <title>Address Save/Edit</title>
 </head>
 <body>
 
-<form th:action="@{/api/address/save}" th:object="${address}">
-    <input type="text" th:field="*{cityName}">
-    <input type="text" th:field="*{districtName}">
-    <input type="text" th:field="*{houseNumber}">
+<form th:action="@{${url}}" th:object="${address}" method="post">
+    <p style="color: red" th:text="${error}"></p>
+    <input type="text" th:field="*{cityName}" placeholder="cityName">
+    <input type="text" th:field="*{districtName}" placeholder="districtName">
+    <input type="text" th:field="*{streetName}" placeholder="streetName">
+    <input type="text" th:field="*{houseNumber}" placeholder="houseNumber">
     <button type="submit">Submit</button>
 </form>
 
-<h1>Hello World</h1>
 </body>
 </html>

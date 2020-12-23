@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Firm Save/Edit</title>
+</head>
+<body>
+
+<form th:action="@{${url}}" method="post" th:object="${firm}">
+    <p th:text="${error}" style="color: red"></p>
+    <input type="text" th:field="*{firmName}" placeholder="firmName">
+    <input type="text" th:field="*{firmWebsite}" placeholder="firmWebsite">
+    <input type="text" th:field="*{firmEmail}" placeholder="firmEmail">
+    <input type="text" th:field="*{phoneNumber}" placeholder="phoneNumber">
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

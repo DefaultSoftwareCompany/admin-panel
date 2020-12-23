@@ -4,7 +4,6 @@ import com.dsc.model.Firm;
 import com.dsc.repository.FirmRepository;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -15,35 +14,34 @@ public class FirmService {
         this.repository = repository;
     }
 
-    public Firm save(Firm firm) {
-        return repository.save(firm);
+    public Firm save(Firm firm) throws Exception {
+        if (firm.getFirmName() == null || (firm.getFirmEmail() == null && firm.getPhoneNumber() == null && firm.getFirmWebsite() == null)) {
+            throw new Exception("Fill out the form completely!");
+        } else {
+            return repository.save(firm);
+        }
     }
 
-    public Firm edit(Long firmId, HttpServletRequest request) {
-        Firm firm = repository.getFirmByFirmId(firmId);
-        String firmName = request.getParameter("firmName");
-        String firmEmail = request.getParameter("firmEmail");
-        String firmWebsite = request.getParameter("firmWebsite");
-        String phoneNumber = request.getParameter("phoneNumber");
-        if (!firmName.isEmpty() && firmName != null) {
-            firm.setFirmName(firmName);
+    public Firm edit(Long firmId, Firm firm) {
+        Firm firm1 = repository.getFirmByFirmId(firmId);
+        if (!firm.getFirmName().isEmpty() && firm.getFirmName() != null) {
+            firm1.setFirmName(firm.getFirmName());
         }
-        if (!firmEmail.isEmpty() && firmEmail != null) {
-            firm.setFirmEmail(firmEmail);
+        if (!firm.getFirmEmail().isEmpty() && firm.getFirmEmail() != null) {
+            firm1.setFirmEmail(firm.getFirmEmail());
         }
-        if (firmWebsite != null && !firmWebsite.isEmpty()) {
-            firm.setFirmWebsite(firmWebsite);
+        if (firm.getFirmWebsite() != null && !firm.getFirmWebsite().isEmpty()) {
+            firm1.setFirmWebsite(firm.getFirmWebsite());
         }
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            firm.setPhoneNumber(phoneNumber);
+        if (firm.getPhoneNumber() != null && !firm.getPhoneNumber().isEmpty()) {
+            firm1.setPhoneNumber(firm.getPhoneNumber());
         }
-        return repository.save(firm);
+        return repository.save(firm1);
     }
 
-    public Firm delete(Long firmId) {
-        Firm firm = repository.getFirmByFirmId(firmId);
-        repository.delete(firm);
-        return firm;
+    public void delete(Long firmId) {
+        repository.deleteById(firmId);
+        return;
     }
 
     public List<Firm> getAll() {

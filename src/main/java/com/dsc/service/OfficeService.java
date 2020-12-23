@@ -27,51 +27,48 @@ public class OfficeService {
         return repository.getByOfficeId(officeId);
     }
 
-    public DeliveryOffice save(HttpServletRequest request) {
-        String addressId = request.getParameter("addressId");
-        DeliveryOffice office = new DeliveryOffice();
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("officeEmail");
-        if (email != null && !email.isEmpty() && phoneNumber != null && !phoneNumber.isEmpty() && addressId != null && !addressId.isEmpty()) {
-            office.setPhoneNumber(phoneNumber);
-            office.setEmail(email);
-            Address address = addressRepository.getAddressByAddressId(Long.parseLong(addressId));
+    public DeliveryOffice save(DeliveryOffice office) throws Exception {
+        if (office.getEmail() != null && !office.getEmail().isEmpty() && office.getPhoneNumber() != null && !office.getPhoneNumber().isEmpty() && office.getAddress() != null) {
+            Address address = addressRepository.save(office.getAddress());
             office.setAddress(address);
+            return repository.save(office);
+        } else {
+            throw new Exception("Fill out the form completely!");
         }
-        return repository.save(office);
     }
 
-    public DeliveryOffice edit(Short officeId, HttpServletRequest request) {
-        DeliveryOffice office = repository.getByOfficeId(officeId);
-        String addressId = request.getParameter("addressId");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("officeEmail");
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            office.setPhoneNumber(phoneNumber);
+    public DeliveryOffice edit(Short officeId, DeliveryOffice office) {
+        DeliveryOffice office1 = repository.getByOfficeId(officeId);
+        if (office.getPhoneNumber() != null && !office.getPhoneNumber().isEmpty()) {
+            office1.setPhoneNumber(office.getPhoneNumber());
         }
-        if (addressId != null && !addressId.isEmpty()) {
-            office.setAddress(addressRepository.getAddressByAddressId(Long.parseLong(addressId)));
+        if (office.getAddress() != null) {
+            Address oldAddress = office1.getAddress();
+            Address newAddress = addressRepository.save(office.getAddress());
+            office1.setAddress(newAddress);
+            repository.save(office1);
+            addressRepository.delete(oldAddress);
         }
-        if (email != null && !email.isEmpty()) {
-            office.setEmail(email);
+        if (office.getEmail() != null && !office.getEmail().isEmpty()) {
+            office1.setEmail(office.getEmail());
         }
 
-        return repository.save(office);
+        return repository.save(office1);
     }
 
-    public DeliveryOffice delete(Short officeId) {
+    public void delete(Short officeId) {
         DeliveryOffice office = repository.getByOfficeId(officeId);
         Address address = office.getAddress();
         repository.delete(office);
         addressRepository.delete(address);
-        return office;
+        return;
     }
 
     public DeliveryOffice getByDistrictName(String districtName) {
-        return repository.getByDistrictName(districtName);
+        return repository.getByAddress_DistrictName(districtName);
     }
 
     public List<DeliveryOffice> getByCityName(String cityName) {
-        return repository.getByCityName(cityName);
+        return repository.getAllByAddress_CityName(cityName);
     }
 }

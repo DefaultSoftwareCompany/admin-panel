@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Addresses List</title>
 </head>
 <body>
 <h1>Addresses List</h1>
-<table>
+<table border="1" cellspacing="0" style="padding: 5px">
     <thead>
     <tr>
         <th>CityName</th>
         <th>DistrictName</th>
+        <th>StreetName</th>
         <th>HouseNumber</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
-    <tbody>
-
+    <tbody th:each="address : ${addresses}">
+    <tr>
+        <td th:text="${address.cityName}"></td>
+        <td th:text="${address.districtName}"></td>
+        <td th:text="${address.streetName}"></td>
+        <td th:text="${address.houseNumber}"></td>
+        <td><a href="" th:href="@{/api/address/edit/{addressId}(addressId = ${address.addressId})}">Edit</a></td>
+        <td><a href="" th:href="@{/api/address/delete/{addressId}(addressId = ${address.addressId})}">Delete</a></td>
+    </tr>
     </tbody>
     </thead>
 </table>

@@ -31,30 +31,22 @@ public class AddressService {
         return repository.save(address);
     }
 
-    public Address edit(Long addressId, HttpServletRequest request) {
-        Address address = repository.getAddressByAddressId(addressId);
-        String cityName = request.getParameter("cityName");
-        String districtName = request.getParameter("districtName");
-        String streetName = request.getParameter("streetName");
-        String houseNumber = request.getParameter("houseNumber");
-        if (cityName != null && !cityName.isEmpty()) {
-            address.setCityName(cityName);
-        }
-        if (streetName != null && !streetName.isEmpty()) {
-            address.setStreetName(streetName);
-        }
-        if (districtName != null && !districtName.isEmpty()) {
-            address.setDistrictName(districtName);
-        }
-        if (houseNumber != null && !houseNumber.isEmpty()) {
-            address.setHouseNumber(houseNumber);
-        }
-        return repository.save(address);
+    public Address edit(Long addressId, Address address) {
+        Address address1 = repository.getAddressByAddressId(addressId);
+        if (address.getCityName() != null && !address.getCityName().isEmpty())
+            address1.setCityName(address.getCityName());
+        if (address.getDistrictName() != null && !address.getDistrictName().isEmpty())
+            address1.setDistrictName(address.getDistrictName());
+        if (address.getHouseNumber() != null && !address.getStreetName().isEmpty())
+            address1.setStreetName(address.getStreetName());
+        if (address.getHouseNumber() != null && !address.getHouseNumber().isEmpty())
+            address1.setHouseNumber(address.getHouseNumber());
+        return repository.save(address1);
     }
 
-    public Address delete(Long addressId) {
+    public void delete(Long addressId) {
         Address address = repository.getAddressByAddressId(addressId);
         repository.delete(address);
-        return address;
+        return;
     }
 }

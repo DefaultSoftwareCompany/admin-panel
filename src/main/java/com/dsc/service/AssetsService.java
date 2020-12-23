@@ -34,15 +34,15 @@ public class AssetsService {
         assets.setExtension(getExtension(multipartFile.getOriginalFilename()));
         repository.save(assets);
         assets.setHashId(hashids.encode(assets.getAssetsId()));
-        String path = "/img/" + assets.getHashId() + "." + assets.getExtension();
+        String path = assets.getHashId() + "." + assets.getExtension();
         File file = new File(uploadFolder + path);
-        assets.setUploadPath(path);
+        assets.setUploadPath(uploadFolder + path);
         multipartFile.transferTo(file);
         return repository.save(assets);
     }
 
     public Assets delete(Assets assets) {
-        File file = new File(uploadFolder + assets.getUploadPath());
+        File file = new File(assets.getUploadPath());
         if (file.delete()) {
             repository.delete(assets);
         }
