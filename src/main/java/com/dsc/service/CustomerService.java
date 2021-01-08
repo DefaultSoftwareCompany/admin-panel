@@ -1,7 +1,7 @@
 package com.dsc.service;
 
-import com.dsc.model.Customer;
 import com.dsc.model.Roles;
+import com.dsc.model.User;
 import com.dsc.repository.CustomerRepository;
 import com.dsc.repository.RolesRepository;
 import org.springframework.stereotype.Service;
@@ -20,57 +20,57 @@ public class CustomerService {
         this.rolesRepository = rolesRepository;
     }
 
-    public List<Customer> getAll() {
+    public List<User> getAll() {
         return repository.findAll();
     }
 
-    public Customer getOne(Long customerId) {
-        return repository.getByCustomerId(customerId);
+    public User getOne(Long customerId) {
+        return repository.getOne(customerId);
     }
 
-    public Customer save(HttpServletRequest request) {
-        Roles roles = rolesRepository.getByRoleId((short) 2);
+    public User save(HttpServletRequest request) {
+        Roles roles = rolesRepository.getByRoleName("USER");
         ArrayList<Roles> rolesArrayList = new ArrayList<>();
         rolesArrayList.add(roles);
-        Customer customer = new Customer();
-        customer.setRoles(rolesArrayList);
+        User user = new User();
+        user.setRoles(rolesArrayList);
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         if (firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty() && phoneNumber != null && !phoneNumber.isEmpty() && password != null && !password.isEmpty()) {
-            customer.setFirstName(firstName);
-            customer.setLastName(lastName);
-            customer.setPhoneNumber(phoneNumber);
-            customer.setPassword(password);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhoneNumber(phoneNumber);
+            user.setPassword(password);
         }
-        customer.setEmail(email);
-        return repository.save(customer);
+        user.setEmail(email);
+        return repository.save(user);
     }
 
-    public Customer edit(Long customerId, HttpServletRequest request) {
-        Customer customer = repository.getByCustomerId(customerId);
-        List<Roles> rolesList = customer.getRoles();
+    public User edit(Long customerId, HttpServletRequest request) {
+        User user = repository.getOne(customerId);
+        List<Roles> rolesList = user.getRoles();
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         if (firstName != null && !firstName.isEmpty()) {
-            customer.setFirstName(firstName);
+            user.setFirstName(firstName);
         }
         if (lastName != null && !lastName.isEmpty()) {
-            customer.setLastName(lastName);
+            user.setLastName(lastName);
         }
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            customer.setPhoneNumber(phoneNumber);
+            user.setPhoneNumber(phoneNumber);
         }
         if (email != null && !email.isEmpty()) {
-            customer.setEmail(email);
+            user.setEmail(email);
         }
         if (password != null && !password.isEmpty()) {
-            customer.setPassword(password);
+            user.setPassword(password);
         }
         String[] removedRoles = request.getParameterValues("deleted-roles");
         String[] newRoles = request.getParameterValues("added-roles");
@@ -79,33 +79,32 @@ public class CustomerService {
         if (removedRoles != null) {
             for (String removedRole : removedRoles) {
                 if (!removedRole.isEmpty()) {
-                    deletedRoles.add(rolesRepository.getByRole(removedRole));
+                    deletedRoles.add(rolesRepository.getByRoleName(removedRole));
                 }
             }
         }
-        System.out.println("deletedRoles: " + deletedRoles);
         if (newRoles != null) {
             for (String newRole : newRoles) {
                 if (!newRole.isEmpty()) {
-                    addedRoles.add(rolesRepository.getByRole(newRole));
+                    addedRoles.add(rolesRepository.getByRoleName(newRole));
                 }
             }
         }
         rolesList.removeAll(deletedRoles);
         rolesList.addAll(addedRoles);
-        customer.setRoles(rolesList);
-        return repository.save(customer);
+        user.setRoles(rolesList);
+        return repository.save(user);
     }
 
-    public List<Customer> getByFirstName(String firstName) {
+    public List<User> getByFirstName(String firstName) {
         return repository.findByFirstNameIgnoreCase(firstName);
     }
 
-    public List<Customer> getByLastName(String lastName) {
+    public List<User> getByLastName(String lastName) {
         return repository.findByLastNameIgnoreCase(lastName);
     }
 
-    public Customer getByPhoneNumber(HttpServletRequest request) {
+    public User getByPhoneNumber(HttpServletRequest request) {
         String phoneNumber = request.getParameter("phoneNumber");
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
             return repository.getByPhoneNumber(phoneNumber);
@@ -113,7 +112,7 @@ public class CustomerService {
         return null;
     }
 
-    public Customer getByEmail(HttpServletRequest request) {
+    public User getByEmail(HttpServletRequest request) {
         String email = request.getParameter("email");
         if (email != null && !email.isEmpty()) {
             return repository.getByEmail(email);
@@ -121,20 +120,20 @@ public class CustomerService {
         return null;
     }
 
-    public Customer getByPasswordAndPhoneNumberOrEmail(HttpServletRequest request) {
+    public User getByPasswordAndPhoneNumberOrEmail(HttpServletRequest request) {
         String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
-        if (((phoneNumber != null && !phoneNumber.isEmpty()) || (email != null && !email.isEmpty())) && !password.isEmpty() && password != null && !password.isEmpty()) {
+        if (((phoneNumber != null && !phoneNumber.isEmpty()) || (email != null && !email.isEmpty())) && (password != null && !password.isEmpty())) {
             return repository.getByPasswordAndPhoneNumberOrEmail(password, phoneNumber, email);
         }
         return null;
     }
 
-    public Customer delete(Long customerId) {
-        Customer customer = repository.getByCustomerId(customerId);
-        repository.delete(customer);
-        return customer;
+    public User delete(Long customerId) {
+        User user = repository.getOne(customerId);
+        repository.delete(user);
+        return user;
     }
 
 }

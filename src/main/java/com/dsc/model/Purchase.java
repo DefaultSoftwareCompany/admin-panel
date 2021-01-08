@@ -7,38 +7,32 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "ordered_products")
-public class OrderedProducts implements Serializable {
+public class Purchase implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private Long orderId;
+    private Long purchaseId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id" )
+    @JoinColumn
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id" )
-    private Customer customer;
+    @JoinColumn
+    private User customer;
 
-    @Column(name = "order_quantity" )
     private Integer orderQuantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "office_id" )
+    @JoinColumn
     private DeliveryOffice office;
 
-    @Column(name = "date_of_order" )
     private String dateOfOrder;
 
-    @Column(name = "deadline" )
     private byte deadline;
 
-    @Column(name = "completion" )
     private Boolean completion;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id" )
+    @JoinColumn
     private Address address;
 }

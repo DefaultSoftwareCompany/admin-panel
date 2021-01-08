@@ -6,7 +6,6 @@ import com.dsc.repository.AddressRepository;
 import com.dsc.repository.OfficeRepository;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -24,7 +23,7 @@ public class OfficeService {
     }
 
     public DeliveryOffice getOne(Short officeId) {
-        return repository.getByOfficeId(officeId);
+        return repository.getOne(officeId);
     }
 
     public DeliveryOffice save(DeliveryOffice office) throws Exception {
@@ -38,7 +37,7 @@ public class OfficeService {
     }
 
     public DeliveryOffice edit(Short officeId, DeliveryOffice office) {
-        DeliveryOffice office1 = repository.getByOfficeId(officeId);
+        DeliveryOffice office1 = repository.getOne(officeId);
         if (office.getPhoneNumber() != null && !office.getPhoneNumber().isEmpty()) {
             office1.setPhoneNumber(office.getPhoneNumber());
         }
@@ -57,18 +56,10 @@ public class OfficeService {
     }
 
     public void delete(Short officeId) {
-        DeliveryOffice office = repository.getByOfficeId(officeId);
+        DeliveryOffice office = repository.getOne(officeId);
         Address address = office.getAddress();
         repository.delete(office);
         addressRepository.delete(address);
-        return;
     }
 
-    public DeliveryOffice getByDistrictName(String districtName) {
-        return repository.getByAddress_DistrictName(districtName);
-    }
-
-    public List<DeliveryOffice> getByCityName(String cityName) {
-        return repository.getAllByAddress_CityName(cityName);
-    }
 }

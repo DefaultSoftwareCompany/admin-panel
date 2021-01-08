@@ -1,7 +1,5 @@
 package com.dsc.repository;
 
-import com.dsc.model.Category;
-import com.dsc.model.Firm;
 import com.dsc.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,18 +8,12 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    public Product getByProductId(Long productId);
+    List<Product> getAllByFirm_FirmName(String firmName);
 
-    public List<Product> findAllByFirm(Firm firm);
+    List<Product> getAllByCategory_CategoryName(String categoryName);
 
-    public List<Product> findAllByCategory(Category category);
+    List<Product> getAllByProductPriceBetween(Float min, Float max);
 
-    public List<Product> findAllByProductPrice(Float price);
-
-    public List<Product> findAllByProductNameContainingIgnoreCase(String productName);
-
-    public List<Product> findAllByProductPriceBetween(Float minPrice, Float maxPrice);
-
-    public List<Product> findAllByProductNameContainingIgnoreCaseAndProductPriceBetween(String productName, Float minPrice, Float maxPrice);
+    List<Product> getAllByProductNameContainingIgnoreCaseAndProductPriceBetween(String productName, Float min, Float max);
 
 }

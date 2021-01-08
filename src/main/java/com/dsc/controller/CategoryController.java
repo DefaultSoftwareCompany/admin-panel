@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @RestController
 public class CategoryController {
@@ -55,7 +54,7 @@ public class CategoryController {
     }
 
     @PostMapping("/api/category/edit/{categoryId}")
-    public ModelAndView update(@PathVariable Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest, ModelAndView modelAndView) throws IOException {
+    public ModelAndView update(@PathVariable Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest, ModelAndView modelAndView) throws Exception {
         service.edit(categoryId, request, multipartHttpServletRequest);
         modelAndView.setViewName("redirect:/api/category/all");
         return modelAndView;

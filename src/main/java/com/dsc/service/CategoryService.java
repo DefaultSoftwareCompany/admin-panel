@@ -1,24 +1,23 @@
 package com.dsc.service;
 
-import com.dsc.model.Assets;
 import com.dsc.model.Category;
+import com.dsc.model.Image;
 import com.dsc.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 @Service
 public class CategoryService {
     private final CategoryRepository repository;
-    private final AssetsService assetsService;
+    private final ImageService imageService;
 
-    public CategoryService(CategoryRepository repository, AssetsService assetsService) {
+    public CategoryService(CategoryRepository repository, ImageService imageService) {
         this.repository = repository;
-        this.assetsService = assetsService;
+        this.imageService = imageService;
     }
 
     public Category save(HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
@@ -29,7 +28,7 @@ public class CategoryService {
         if (categoryName != null && !categoryName.isEmpty() && categoryDescription != null && !categoryDescription.isEmpty() && file != null && !file.isEmpty()) {
             category.setCategoryName(request.getParameter("categoryName"));
             category.setCategoryDescription(request.getParameter("categoryDescription"));
-            category.setAssets(assetsService.save(file));
+            category.setCategoryImage(imageService.save(file));
             return repository.save(category);
         } else {
             throw new Exception("Fill out the form completely!");
@@ -37,15 +36,14 @@ public class CategoryService {
     }
 
     public void delete(Short categoryId) {
-        Category category = repository.getCategoryByCategoryId(categoryId);
-        Assets assets = category.getAssets();
+        Category category = repository.getOne(categoryId);
+        Image image = category.getCategoryImage();
         repository.delete(category);
-        assetsService.delete(assets);
-        return;
+        imageService.delete(image.getAssetsId());
     }
 
-    public Category edit(Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
-        Category category = repository.getCategoryByCategoryId(categoryId);
+    public Category edit(Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+        Category category = repository.getOne(categoryId);
         MultipartFile file = multipartHttpServletRequest.getFile("file");
         String categoryName = request.getParameter("categoryName");
         String categoryDescription = request.getParameter("categoryDescription");
@@ -56,11 +54,11 @@ public class CategoryService {
             category.setCategoryDescription(categoryDescription);
         }
         if (file != null && !file.isEmpty()) {
-            Assets oldAssets = category.getAssets();
-            Assets newAssets = assetsService.save(file);
-            category.setAssets(newAssets);
+            Image oldImage = category.getCategoryImage();
+            Image newImage = imageService.save(file);
+            category.setCategoryImage(newImage);
             repository.save(category);
-            assetsService.delete(oldAssets);
+            imageService.delete(oldImage.getAssetsId());
         }
         return repository.save(category);
     }
@@ -70,7 +68,7 @@ public class CategoryService {
     }
 
     public Category getOne(Short categoryId) {
-        return repository.getCategoryByCategoryId(categoryId);
+        return repository.getOne(categoryId);
     }
 
 }

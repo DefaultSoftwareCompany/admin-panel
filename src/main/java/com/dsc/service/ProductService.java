@@ -1,18 +1,17 @@
 package com.dsc.service;
 
-import com.dsc.model.Assets;
 import com.dsc.model.Category;
 import com.dsc.model.Firm;
+import com.dsc.model.Image;
 import com.dsc.model.Product;
 import com.dsc.repository.CategoryRepository;
 import com.dsc.repository.FirmRepository;
 import com.dsc.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -20,9 +19,9 @@ public class ProductService {
     private final ProductRepository repository;
     private final FirmRepository firmRepository;
     private final CategoryRepository categoryRepository;
-    private final AssetsService service;
+    private final ImageService service;
 
-    public ProductService(ProductRepository repository, FirmRepository firmRepository, CategoryRepository categoryRepository, AssetsService service) {
+    public ProductService(ProductRepository repository, FirmRepository firmRepository, CategoryRepository categoryRepository, ImageService service) {
         this.repository = repository;
         this.firmRepository = firmRepository;
         this.categoryRepository = categoryRepository;
@@ -30,93 +29,55 @@ public class ProductService {
     }
 
     public Product getOne(Long productId) {
-        return repository.getByProductId(productId);
+        return repository.getOne(productId);
     }
 
     public List<Product> getAll() {
         return repository.findAll();
     }
 
-    public Product save(HttpServletRequest request, MultipartFile multipartFile) throws ParseException, IOException {
+    public Product save(HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         Product product = new Product();
+        MultipartFile multipartFile = multipartHttpServletRequest.getFile("image");
         String productName = request.getParameter("product-name");
         String productPrice = request.getParameter("product-price");
         String dateOfManufacture = request.getParameter("date-of-manufacture");
         String quantity = request.getParameter("quantity");
         String firmId = request.getParameter("firm");
         String categoryId = request.getParameter("category");
-        if (productName != null && !productName.isEmpty() && productPrice != null && !productPrice.isEmpty() && dateOfManufacture != null && !dateOfManufacture.isEmpty() && quantity != null && !quantity.isEmpty() && firmId != null && !firmId.isEmpty() && categoryId != null && !categoryId.isEmpty()) {
+        if (productName != null && !productName.isEmpty() && productPrice != null && !productPrice.isEmpty() && dateOfManufacture != null && !dateOfManufacture.isEmpty() && quantity != null && !quantity.isEmpty() && firmId != null && !firmId.isEmpty() && categoryId != null && !categoryId.isEmpty() && multipartFile != null && !multipartFile.isEmpty()) {
             product.setProductName(productName);
             product.setProductPrice(Float.valueOf(productPrice));
             product.setQuantity(Long.valueOf(quantity));
             System.out.println(dateOfManufacture);
             product.setDateOfManufacture(dateOfManufacture);
             System.out.println(product.getDateOfManufacture());
-            Firm firm = firmRepository.getFirmByFirmId(Long.valueOf(firmId));
-            Category category = categoryRepository.getCategoryByCategoryId(Short.valueOf(categoryId));
+            Firm firm = firmRepository.getOne(Long.valueOf(firmId));
+            Category category = categoryRepository.getOne(Short.valueOf(categoryId));
             product.setFirm(firm);
             product.setCategory(category);
-            Assets assets = service.save(multipartFile);
-            product.setAssets(assets);
+            Image image = service.save(multipartFile);
+            product.setProductImage(image);
+            return repository.save(product);
+        } else {
+            throw new Exception("Fill out the form completely!");
         }
-        return repository.save(product);
     }
 
-    public List<Product> getByProductName(String productName) {
-        return repository.findAllByProductNameContainingIgnoreCase(productName);
-    }
-
-    public List<Product> getByFirm(Long firmId) {
-        Firm firm = firmRepository.getFirmByFirmId(firmId);
-        return repository.findAllByFirm(firm);
-    }
-
-    public List<Product> getByCategory(Short categoryId) {
-        Category category = categoryRepository.getCategoryByCategoryId(categoryId);
-        return repository.findAllByCategory(category);
-    }
-
-    public List<Product> getByPrice(Float price) {
-        return repository.findAllByProductPrice(price);
-    }
-
-    public List<Product> getByPriceBetween(HttpServletRequest request) {
-        Float minPrice = 0f;
-        Float maxPrice = Float.MAX_VALUE;
-        if (request.getParameter("min-price") != null && !request.getParameter("min-price").isEmpty()) {
-            minPrice = Float.parseFloat(request.getParameter("min-price"));
-        }
-        if (request.getParameter("max-price") != null && !request.getParameter("max-price").isEmpty()) {
-            maxPrice = Float.parseFloat(request.getParameter("max-price"));
-        }
-        return repository.findAllByProductPriceBetween(minPrice, maxPrice);
-    }
-
-    public List<Product> getByNameAndPriceBetween(HttpServletRequest request) {
-        String productName = request.getParameter("product-name");
-        Float minPrice = 0f;
-        Float maxPrice = Float.MAX_VALUE;
-        if (request.getParameter("min-price") != null && !request.getParameter("min-price").isEmpty()) {
-            minPrice = Float.parseFloat(request.getParameter("min-price"));
-        }
-        if (request.getParameter("max-price") != null && !request.getParameter("max-price").isEmpty()) {
-            maxPrice = Float.parseFloat(request.getParameter("max-price"));
-        }
-        return repository.findAllByProductNameContainingIgnoreCaseAndProductPriceBetween(productName, minPrice, maxPrice);
-    }
 
     public Product delete(Long productId) {
-        Product product = repository.getByProductId(productId);
-        Assets assets = product.getAssets();
+        Product product = repository.getOne(productId);
+        Image image = product.getProductImage();
         repository.delete(product);
-        service.delete(assets);
+        service.delete(image.getAssetsId());
         return product;
     }
 
-    public Product edit(Long productId, HttpServletRequest request, MultipartFile assets) throws IOException {
-        Product product = repository.getByProductId(productId);
+    public Product edit(Long productId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+        Product product = repository.getOne(productId);
         String productName = request.getParameter("product-name");
         String productPrice = request.getParameter("product-price");
+        MultipartFile assets = multipartHttpServletRequest.getFile("image");
         String dateOfManufacture = request.getParameter("date-of-manufacture");
         String quantity = request.getParameter("quantity");
         String firmId = request.getParameter("firm");
@@ -134,19 +95,19 @@ public class ProductService {
             product.setQuantity(Long.parseLong(quantity));
         }
         if (firmId != null && !firmId.isEmpty()) {
-            Firm firm = firmRepository.getFirmByFirmId(Long.parseLong(firmId));
+            Firm firm = firmRepository.getOne(Long.parseLong(firmId));
             product.setFirm(firm);
         }
         if (categoryId != null && !categoryId.isEmpty()) {
-            Category category = categoryRepository.getCategoryByCategoryId(Short.parseShort(categoryId));
+            Category category = categoryRepository.getOne(Short.parseShort(categoryId));
             product.setCategory(category);
         }
-        if (assets != null) {
-            Assets oldAssets = product.getAssets();
-            Assets newAssets = service.save(assets);
-            product.setAssets(newAssets);
+        if (assets != null && !assets.isEmpty()) {
+            Image oldImage = product.getProductImage();
+            Image newImage = service.save(assets);
+            product.setProductImage(newImage);
             repository.save(product);
-            service.delete(oldAssets);
+            service.delete(oldImage.getAssetsId());
             return product;
         }
         return repository.save(product);

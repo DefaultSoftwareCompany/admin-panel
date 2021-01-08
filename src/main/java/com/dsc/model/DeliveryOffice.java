@@ -9,24 +9,22 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "delivery_office")
 public class DeliveryOffice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "office_id")
     private Short officeId;
 
-    @Column(name = "phone_number")
+    @Column(unique = true)
     private String phoneNumber;
 
     @OneToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(unique = true)
     private Address address;
 
-    @Column(name = "email")
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "office")
     @JsonIgnore
-    private List<OrderedProducts> products;
+    private List<Purchase> purchases;
 }

@@ -19,7 +19,7 @@ public class RolesService {
         Roles roles = new Roles();
         String roleName = request.getParameter("roleName");
         if (roleName != null && !roleName.isEmpty()) {
-            roles.setRole(roleName.toUpperCase());
+            roles.setRoleName(roleName.toUpperCase());
         }
         return repository.save(roles);
     }

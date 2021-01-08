@@ -10,33 +10,23 @@ import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "roles")
 public class Roles implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
     private Short roleId;
 
-    @Column(name = "role")
-    private String role;
+    @Column(unique = true)
+    private String roleName;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Customer> customers;
-
-    @Override
-    public String toString() {
-        return "Roles{" +
-                "roleId=" + roleId +
-                ", role='" + role + '\'' +
-                '}';
-    }
+    private List<User> users;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Roles roles = (Roles) o;
-        return Objects.equals(role, roles.role);
+        return Objects.equals(roleName, roles.roleName);
     }
 }

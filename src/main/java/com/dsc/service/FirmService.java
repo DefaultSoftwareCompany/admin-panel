@@ -23,7 +23,7 @@ public class FirmService {
     }
 
     public Firm edit(Long firmId, Firm firm) {
-        Firm firm1 = repository.getFirmByFirmId(firmId);
+        Firm firm1 = repository.getOne(firmId);
         if (!firm.getFirmName().isEmpty() && firm.getFirmName() != null) {
             firm1.setFirmName(firm.getFirmName());
         }
@@ -41,7 +41,6 @@ public class FirmService {
 
     public void delete(Long firmId) {
         repository.deleteById(firmId);
-        return;
     }
 
     public List<Firm> getAll() {
@@ -49,6 +48,6 @@ public class FirmService {
     }
 
     public Firm getOne(Long firmId) {
-        return repository.getFirmByFirmId(firmId);
+        return repository.getOne(firmId);
     }
 }

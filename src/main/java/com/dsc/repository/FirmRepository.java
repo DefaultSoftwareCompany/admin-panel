@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FirmRepository extends JpaRepository<Firm, Long> {
-    public Firm getFirmByFirmId(Long firmId);
 }
 

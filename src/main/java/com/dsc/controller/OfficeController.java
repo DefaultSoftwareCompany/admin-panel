@@ -2,12 +2,8 @@ package com.dsc.controller;
 
 import com.dsc.model.DeliveryOffice;
 import com.dsc.service.OfficeService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 public class OfficeController {

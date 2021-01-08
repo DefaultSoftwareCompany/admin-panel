@@ -9,34 +9,24 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "category")
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
     private Short categoryId;
 
-    @Column(name = "category_name")
+    @Column(unique = true)
     private String categoryName;
 
-    @Column(name = "category_description")
+    @Column(columnDefinition = "text")
     private String categoryDescription;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assets_id")
+    @JoinColumn
     @JsonIgnore
-    private Assets assets;
+    private Image categoryImage;
 
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<Product> products;
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", categoryDescription='" + categoryDescription + '\'' +
-                '}';
-    }
 }
