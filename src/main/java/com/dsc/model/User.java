@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -15,12 +16,16 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(unique = true, nullable = false)
+    private String userName;
+
     private String firstName;
 
     private String lastName;
 
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true)
@@ -36,5 +41,5 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Roles> roles;
+    private Set<Roles> roles;
 }

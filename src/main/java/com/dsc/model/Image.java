@@ -25,11 +25,11 @@ public class Image implements Serializable {
 
     private Long url;
 
-    @OneToOne(mappedBy = "category_image", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "categoryImage", fetch = FetchType.LAZY)
     @JsonIgnore
     private Category category;
 
-    @OneToOne(mappedBy = "product_image", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "productImage", fetch = FetchType.LAZY)
     @JsonIgnore
     private Product product;
 }

@@ -18,12 +18,9 @@ public class AddressService {
         return repository.findAll();
     }
 
-    public Address getOne(Long addressId) {
-        return repository.getOne(addressId);
-    }
 
     public Address save(Address address) throws Exception {
-        if (address.getCityName() == null || address.getDistrictName() == null || address.getStreetName() == null || address.getHouseNumber() == null) {
+        if (address.getCityName() == null || address.getCityName().length() < 5 || address.getDistrictName() == null || address.getDistrictName().length() < 5 || address.getStreetName() == null || address.getStreetName().length() < 5 || address.getHouseNumber() == null || address.getHouseNumber().isEmpty()) {
             throw new Exception("Fill out the form completely!");
         }
         return repository.save(address);
@@ -31,7 +28,6 @@ public class AddressService {
 
 
     public void delete(Long addressId) {
-        Address address = repository.getOne(addressId);
-        repository.delete(address);
+        repository.deleteById(addressId);
     }
 }

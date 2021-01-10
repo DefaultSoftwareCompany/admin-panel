@@ -30,4 +30,5 @@ public class AssetsController {
     public void delete(@PathVariable Long imageId) {
         service.delete(imageId);
     }
+
 }

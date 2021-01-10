@@ -14,6 +14,7 @@ public class Firm implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long firmId;
 
+    @Column(unique = true)
     private String firmName;
 
     @Column(unique = true)

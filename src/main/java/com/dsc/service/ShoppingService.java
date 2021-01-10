@@ -12,13 +12,13 @@ public class ShoppingService {
     private final PurchaseRepository repository;
     private final ProductService productService;
     private final OfficeRepository officeRepository;
-    private final CustomerService customerService;
+    private final UserService userService;
 
-    public ShoppingService(PurchaseRepository repository, ProductService productService, OfficeRepository officeRepository, CustomerService customerService) {
+    public ShoppingService(PurchaseRepository repository, ProductService productService, OfficeRepository officeRepository, UserService userService) {
         this.repository = repository;
         this.productService = productService;
         this.officeRepository = officeRepository;
-        this.customerService = customerService;
+        this.userService = userService;
     }
 
     public Purchase getByOrderId(Long orderId) {
@@ -26,7 +26,7 @@ public class ShoppingService {
     }
 
     public List<Purchase> getByCustomer(Long customerId) {
-        return repository.getAllByCustomer(customerService.getOne(customerId));
+        return repository.getAllByCustomer(userService.getOne(customerId));
     }
 
     public List<Purchase> getByOffice(Short officeId) {

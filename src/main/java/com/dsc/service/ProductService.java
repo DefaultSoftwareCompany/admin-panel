@@ -65,12 +65,8 @@ public class ProductService {
     }
 
 
-    public Product delete(Long productId) {
-        Product product = repository.getOne(productId);
-        Image image = product.getProductImage();
-        repository.delete(product);
-        service.delete(image.getAssetsId());
-        return product;
+    public void delete(Long productId) {
+        repository.deleteById(productId);
     }
 
     public Product edit(Long productId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
