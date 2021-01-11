@@ -5,6 +5,7 @@ import com.dsc.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -29,5 +30,11 @@ public class AddressService {
 
     public void delete(Long addressId) {
         repository.deleteById(addressId);
+    }
+
+    public Address getOne(Long addressId) throws Exception {
+        Optional<Address> address = repository.findById(addressId);
+        if (address.isPresent()) return address.get();
+        else throw new Exception("There is no address with such an id");
     }
 }

@@ -15,13 +15,9 @@ public class OrderController {
         this.service = service;
     }
 
-    @PostMapping("/api/order/save")
-    public ResponseEntity<Purchase> save(@ModelAttribute Purchase purchase) throws Exception {
-        return ResponseEntity.ok(service.save(purchase));
-    }
 
     @GetMapping("/api/order/get/one/{orderId}")
-    public ResponseEntity<Purchase> getOne(@PathVariable Long orderId) {
+    public ResponseEntity<Purchase> getOne(@PathVariable Long orderId) throws Exception {
         return ResponseEntity.ok(service.getByOrderId(orderId));
     }
 

@@ -6,6 +6,7 @@ import com.dsc.repository.PurchaseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShoppingService {
@@ -21,8 +22,10 @@ public class ShoppingService {
         this.userService = userService;
     }
 
-    public Purchase getByOrderId(Long orderId) {
-        return repository.getOne(orderId);
+    public Purchase getByOrderId(Long orderId) throws Exception {
+        Optional<Purchase> purchase = repository.findById(orderId);
+        if (purchase.isPresent()) return purchase.get();
+        else throw new Exception("There is no purchase with such and id");
     }
 
     public List<Purchase> getByCustomer(Long customerId) {
@@ -36,9 +39,5 @@ public class ShoppingService {
 
     public List<Purchase> getByProduct(Long productId) {
         return repository.getAllByProduct(productService.getOne(productId));
-    }
-
-    public Purchase save(Purchase purchase) throws Exception {
-        return repository.save(purchase);
     }
 }

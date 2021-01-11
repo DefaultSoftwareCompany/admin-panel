@@ -4,7 +4,6 @@ import com.dsc.model.DeliveryOffice;
 import com.dsc.service.OfficeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class OfficeController {
     }
 
     @PostMapping("/api/office/owner/edit/{officeId}")
-    public ResponseEntity<DeliveryOffice> update(@PathVariable Short officeId, @ModelAttribute DeliveryOffice office, ModelAndView modelAndView) {
+    public ResponseEntity<DeliveryOffice> update(@PathVariable Short officeId, @ModelAttribute DeliveryOffice office) {
         return ResponseEntity.ok(service.edit(officeId, office));
     }
 

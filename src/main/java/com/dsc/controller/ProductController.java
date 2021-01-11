@@ -3,13 +3,11 @@ package com.dsc.controller;
 import com.dsc.model.Product;
 import com.dsc.service.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -18,6 +16,11 @@ public class ProductController {
 
     public ProductController(ProductService service) {
         this.service = service;
+    }
+
+    @GetMapping("/api/editor/products/all")
+    public ResponseEntity<List<Product>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
 

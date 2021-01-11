@@ -25,4 +25,14 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
+
+    @DeleteMapping("/api/owner/address/delete/{addressId}")
+    public void delete(@PathVariable Long addressId) {
+        service.delete(addressId);
+    }
+
+    @GetMapping("/api/owner/address/get/{addressId}")
+    public ResponseEntity<Address> getOne(@PathVariable Long addressId) throws Exception {
+        return ResponseEntity.ok(service.getOne(addressId));
+    }
 }

@@ -17,7 +17,7 @@ public class AssetsController {
         this.service = service;
     }
 
-    @PostMapping("/api/assets/save")
+    @PostMapping("/api/editor/assets/save")
     public ResponseEntity<Image> save(@RequestParam MultipartFile file) throws IOException {
         try {
             return ResponseEntity.ok(service.save(file));
@@ -26,7 +26,12 @@ public class AssetsController {
         }
     }
 
-    @DeleteMapping("/api/assets/delete/{imageId}")
+    @GetMapping("/api/editor/assets/get/{assetsId}")
+    public ResponseEntity<Image> getOne(@PathVariable Long assetsId) throws Exception {
+        return ResponseEntity.ok(service.getOne(assetsId));
+    }
+
+    @DeleteMapping("/api/admin/assets/delete/{imageId}")
     public void delete(@PathVariable Long imageId) {
         service.delete(imageId);
     }

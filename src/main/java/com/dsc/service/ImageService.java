@@ -14,6 +14,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 public class ImageService {
     @Value("${image.url}")
@@ -25,8 +27,10 @@ public class ImageService {
         this.repository = repository;
     }
 
-    public Image getOne(Long assetsId) {
-        return repository.getOne(assetsId);
+    public Image getOne(Long assetsId) throws Exception {
+        Optional<Image> image = repository.findById(assetsId);
+        if (image.isPresent()) return image.get();
+        else throw new Exception("There is no image with such an id");
     }
 
     public Image save(MultipartFile multipartFile) throws Exception {
