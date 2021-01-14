@@ -31,7 +31,7 @@ public class Purchase implements Serializable {
     @Column(columnDefinition = "smallint default 20")
     private byte deadline;
 
-    @Column(columnDefinition = "byte default false")
+    @Column(columnDefinition = "boolean default false")
     private Boolean completion;
 
     @OneToOne(fetch = FetchType.EAGER)
