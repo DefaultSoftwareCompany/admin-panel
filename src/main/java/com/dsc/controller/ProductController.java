@@ -34,7 +34,7 @@ public class ProductController {
         service.delete(productId);
     }
 
-    @PostMapping("/api/editor/products/edit/{productId}")
+    @PutMapping("/api/editor/products/edit/{productId}")
     public ResponseEntity<Product> edit(@PathVariable Long productId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         return ResponseEntity.ok(service.edit(productId, request, multipartHttpServletRequest));
     }

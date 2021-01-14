@@ -4,6 +4,7 @@ import com.dsc.model.Address;
 import com.dsc.model.DeliveryOffice;
 import com.dsc.repository.AddressRepository;
 import com.dsc.repository.OfficeRepository;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +23,8 @@ public class OfficeService {
         return repository.findAll();
     }
 
-    public DeliveryOffice getOne(Short officeId) {
-        return repository.getOne(officeId);
-    }
-
     public DeliveryOffice save(DeliveryOffice office) throws Exception {
-        if (office.getEmail() != null && !office.getEmail().isEmpty() && office.getPhoneNumber() != null && !office.getPhoneNumber().isEmpty() && office.getAddress() != null) {
+        if (office.getEmail() != null && !office.getEmail().isEmpty() && EmailValidator.getInstance().isValid(office.getEmail()) && office.getPhoneNumber() != null && office.getPhoneNumber().length() > 4 && office.getAddress() != null) {
             Address address = addressRepository.save(office.getAddress());
             office.setAddress(address);
             return repository.save(office);
@@ -37,7 +34,7 @@ public class OfficeService {
     }
 
     public DeliveryOffice edit(Short officeId, DeliveryOffice office) {
-        DeliveryOffice office1 = repository.getOne(officeId);
+        DeliveryOffice office1 = repository.findById(officeId).get();
         if (office.getPhoneNumber() != null && !office.getPhoneNumber().isEmpty()) {
             office1.setPhoneNumber(office.getPhoneNumber());
         }
@@ -48,7 +45,7 @@ public class OfficeService {
             repository.save(office1);
             addressRepository.delete(oldAddress);
         }
-        if (office.getEmail() != null && !office.getEmail().isEmpty()) {
+        if (office.getEmail() != null && !office.getEmail().isEmpty() && EmailValidator.getInstance().isValid(office.getEmail())) {
             office1.setEmail(office.getEmail());
         }
 

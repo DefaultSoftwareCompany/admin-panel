@@ -65,6 +65,7 @@ public class ImageService {
 
     public void delete(Long imageId) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("password", "Sunnat5427#");
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, new HttpHeaders());
         RestTemplate restTemplate = new RestTemplate();
         Image image = repository.getOne(imageId);

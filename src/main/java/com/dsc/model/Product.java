@@ -22,17 +22,14 @@ public class Product implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn
-    @JsonIgnore
     private Image productImage;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Category category;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Firm firm;
 
     private String dateOfManufacture;

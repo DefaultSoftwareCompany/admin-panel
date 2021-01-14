@@ -27,7 +27,7 @@ public class FirmController {
     }
 
 
-    @PostMapping("/api/admin/firm/edit/{firmId}")
+    @PutMapping("/api/admin/firm/edit/{firmId}")
     public ResponseEntity<Firm> update(@PathVariable Long firmId, @ModelAttribute Firm firm) {
         return ResponseEntity.ok(service.edit(firmId, firm));
     }

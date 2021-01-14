@@ -22,7 +22,6 @@ public class Category implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn
-    @JsonIgnore
     private Image categoryImage;
 
     @OneToMany(mappedBy = "category")

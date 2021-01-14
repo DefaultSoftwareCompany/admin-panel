@@ -29,7 +29,7 @@ public class ProductService {
     }
 
     public Product getOne(Long productId) {
-        return repository.getOne(productId);
+        return repository.findById(productId).get();
     }
 
     public List<Product> getAll() {
@@ -51,9 +51,8 @@ public class ProductService {
             product.setQuantity(Long.valueOf(quantity));
             System.out.println(dateOfManufacture);
             product.setDateOfManufacture(dateOfManufacture);
-            System.out.println(product.getDateOfManufacture());
-            Firm firm = firmRepository.getOne(Long.valueOf(firmId));
-            Category category = categoryRepository.getOne(Short.valueOf(categoryId));
+            Firm firm = firmRepository.findById(Long.valueOf(firmId)).get();
+            Category category = categoryRepository.findById(Short.valueOf(categoryId)).get();
             product.setFirm(firm);
             product.setCategory(category);
             Image image = service.save(multipartFile);
@@ -66,7 +65,9 @@ public class ProductService {
 
 
     public void delete(Long productId) {
-        repository.deleteById(productId);
+        Product product = repository.findById(productId).get();
+        repository.delete(product);
+        service.delete(product.getProductImage().getAssetsId());
     }
 
     public Product edit(Long productId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
@@ -91,11 +92,11 @@ public class ProductService {
             product.setQuantity(Long.parseLong(quantity));
         }
         if (firmId != null && !firmId.isEmpty()) {
-            Firm firm = firmRepository.getOne(Long.parseLong(firmId));
+            Firm firm = firmRepository.findById(Long.parseLong(firmId)).get();
             product.setFirm(firm);
         }
         if (categoryId != null && !categoryId.isEmpty()) {
-            Category category = categoryRepository.getOne(Short.parseShort(categoryId));
+            Category category = categoryRepository.findById(Short.parseShort(categoryId)).get();
             product.setCategory(category);
         }
         if (assets != null && !assets.isEmpty()) {

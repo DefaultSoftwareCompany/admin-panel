@@ -26,7 +26,7 @@ public class OfficeController {
         return ResponseEntity.ok(service.save(office));
     }
 
-    @PostMapping("/api/office/owner/edit/{officeId}")
+    @PutMapping("/api/owner/office/edit/{officeId}")
     public ResponseEntity<DeliveryOffice> update(@PathVariable Short officeId, @ModelAttribute DeliveryOffice office) {
         return ResponseEntity.ok(service.edit(officeId, office));
     }

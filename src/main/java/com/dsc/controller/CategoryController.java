@@ -3,10 +3,7 @@ package com.dsc.controller;
 import com.dsc.model.Category;
 import com.dsc.service.CategoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +28,12 @@ public class CategoryController {
     }
 
 
-    @PostMapping("/api/admin/category/edit/{categoryId}")
+    @PutMapping("/api/admin/category/edit/{categoryId}")
     public ResponseEntity<Category> update(@PathVariable Short categoryId, HttpServletRequest request, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         return ResponseEntity.ok(service.edit(categoryId, request, multipartHttpServletRequest));
     }
 
-    @GetMapping("/api/admin/category/delete/{categoryId}")
+    @DeleteMapping("/api/admin/category/delete/{categoryId}")
     public void delete(@PathVariable Short categoryId) {
         service.delete(categoryId);
     }
